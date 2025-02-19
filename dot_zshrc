@@ -1,0 +1,85 @@
+
+# Path to your oh-my-zsh installation.
+export ZSH="/Users/gustavop/.oh-my-zsh"
+
+ZSH_THEME=""
+
+# Add wisely, as too many plugins slow down shell startup.
+plugins=(git gustavop docker docker-compose z)
+
+source $ZSH/oh-my-zsh.sh
+
+source <(kubectl completion zsh)
+
+# You may need to manually set your language environment
+export LANG=en_US.UTF-8
+
+export EDITOR="nvim"
+export VISUAL="$EDITOR"
+# JAVA_HOME
+#export JAVA_HOME=$(/usr/libexec/java_home -v "1.8.0_333")
+#export JAVA_HOME=$(/usr/libexec/java_home -v "11")
+export JAVA_HOME=$(/usr/libexec/java_home -v "21.0.4+9-LTS")
+
+alias lc='colorls -lA --sd'
+alias tarefas='cat $HOME/Desktop/tarefas.txt'
+
+#Blade
+export PATH="$PATH:$HOME/Library/PackageManager/bin"
+
+# Add RVM to PATH for scripting. Make sure this is the last PATH variable change.
+export PATH="$PATH:$HOME/.rvm/bin"
+
+export NVM_DIR="$HOME/.nvm"
+[ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"  # This loads nvm
+[ -s "$NVM_DIR/bash_completion" ] && \. "$NVM_DIR/bash_completion"  # This loads nvm bash_completion
+
+# place this after nvm initialization!
+autoload -U add-zsh-hook
+
+load-nvmrc() {
+  local nvmrc_path
+  nvmrc_path="$(nvm_find_nvmrc)"
+
+  if [ -n "$nvmrc_path" ]; then
+    local nvmrc_node_version
+    nvmrc_node_version=$(nvm version "$(cat "${nvmrc_path}")")
+
+    if [ "$nvmrc_node_version" = "N/A" ]; then
+      nvm install
+    elif [ "$nvmrc_node_version" != "$(nvm version)" ]; then
+      nvm use
+    fi
+  elif [ -n "$(PWD=$OLDPWD nvm_find_nvmrc)" ] && [ "$(nvm version)" != "$(nvm version default)" ]; then
+    echo "Reverting to nvm default version"
+    nvm use default
+  fi
+}
+
+add-zsh-hook chpwd load-nvmrc
+load-nvmrc
+
+export PYENV_ROOT="$HOME/.pyenv"
+[[ -d $PYENV_ROOT/bin ]] && export PATH="$PYENV_ROOT/bin:$PATH"
+eval "$(pyenv init -)"
+
+export DOCKER_HOST=unix://"$HOME/.docker/run/docker.sock"
+
+IJ_CLONE_PATH="$HOME/code/liferay-intellij"
+
+ij() {
+        ${IJ_CLONE_PATH}/intellij "$@"
+}
+
+# The next line updates PATH for the Google Cloud SDK.
+if [ -f '/Users/gustavop/Downloads/google-cloud-sdk/path.zsh.inc' ]; then . '/Users/gustavop/Downloads/google-cloud-sdk/path.zsh.inc'; fi
+
+# The next line enables shell command completion for gcloud.
+if [ -f '/Users/gustavop/Downloads/google-cloud-sdk/completion.zsh.inc' ]; then . '/Users/gustavop/Downloads/google-cloud-sdk/completion.zsh.inc'; fi
+
+. "$HOME/.local/bin/env"
+
+export PATH="$HOME/.tmuxifier/bin:$PATH"
+
+eval "$(starship init zsh)"
+eval "$(tmuxifier init -)"
