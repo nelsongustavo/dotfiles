@@ -5,7 +5,7 @@ export ZSH="/Users/gustavop/.oh-my-zsh"
 ZSH_THEME=""
 
 # Add wisely, as too many plugins slow down shell startup.
-plugins=(git gustavop docker docker-compose z)
+plugins=(git gustavop docker docker-compose asdf)
 
 source $ZSH/oh-my-zsh.sh
 
@@ -17,18 +17,16 @@ export LANG=en_US.UTF-8
 export EDITOR="nvim"
 export VISUAL="$EDITOR"
 # JAVA_HOME
-#export JAVA_HOME=$(/usr/libexec/java_home -v "1.8.0_333")
-#export JAVA_HOME=$(/usr/libexec/java_home -v "11")
-export JAVA_HOME=$(/usr/libexec/java_home -v "21.0.4+9-LTS")
+export JAVA_HOME=$(/usr/libexec/java_home -v "1.8.0_333")
+# export JAVA_HOME=$(/usr/libexec/java_home -v "11")
+# export JAVA_HOME=$(/usr/libexec/java_home -v "21.0.4+9-LTS")
 
 alias lc='colorls -lA --sd'
 alias tarefas='cat $HOME/Desktop/tarefas.txt'
+alias inv='nvim $(fzf --preview "bat --color=always --style=numbers --line-range=:500 {}")'
 
 #Blade
 export PATH="$PATH:$HOME/Library/PackageManager/bin"
-
-# Add RVM to PATH for scripting. Make sure this is the last PATH variable change.
-export PATH="$PATH:$HOME/.rvm/bin"
 
 export NVM_DIR="$HOME/.nvm"
 [ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"  # This loads nvm
@@ -83,3 +81,18 @@ export PATH="$HOME/.tmuxifier/bin:$PATH"
 
 eval "$(starship init zsh)"
 eval "$(tmuxifier init -)"
+# Set up fzf key bindings and fuzzy completion
+source <(fzf --zsh)
+
+function y() {
+	local tmp="$(mktemp -t "yazi-cwd.XXXXXX")" cwd
+	yazi "$@" --cwd-file="$tmp"
+	if cwd="$(command cat -- "$tmp")" && [ -n "$cwd" ] && [ "$cwd" != "$PWD" ]; then
+		builtin cd -- "$cwd"
+	fi
+	rm -f -- "$tmp"
+}
+alias lzd='lazydocker'
+
+export PATH="${ASDF_DATA_DIR:-$HOME/.asdf}/shims:$PATH"
+export PATH="/usr/local/opt/libpq/bin:$PATH"
