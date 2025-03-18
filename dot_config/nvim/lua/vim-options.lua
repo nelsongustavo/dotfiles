@@ -8,6 +8,8 @@ vim.g.maplocalleader = "\\"
 
 vim.opt.swapfile = false
 vim.opt.number = true
+-- views can only be fully collapsed with the global statusline
+vim.opt.laststatus = 3
 
 vim.keymap.set("n", "<c-k>", ":wincmd k<CR>")
 vim.keymap.set("n", "<c-j>", ":wincmd j<CR>")
