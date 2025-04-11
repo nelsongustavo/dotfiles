@@ -1,0 +1,36 @@
+return {
+	--	"nvimtools/none-ls.nvim",
+	--	dependencies = {
+	--		"nvimtools/none-ls-extras.nvim",
+	--		"nvim-lua/plenary.nvim",
+	--	},
+	--	config = function()
+	--		local null_ls = require("null-ls")
+	--
+	--		null_ls.setup({
+	--			sources = {
+	--				null_ls.builtins.formatting.prettier,
+	--				null_ls.builtins.formatting.stylua,
+	--				null_ls.builtins.diagnostics.rubocop,
+	--				null_ls.builtins.formatting.rubocop, -- Ensure rubocop is used for formatting
+	--				require("none-ls.diagnostics.eslint"),
+	--			},
+	--			on_attach = function(client, bufnr)
+	--				if client.supports_method("textDocument/formatting") then
+	--					vim.api.nvim_clear_autocmds({ buffer = bufnr })
+	--					vim.api.nvim_create_autocmd("BufWritePre", {
+	--						buffer = bufnr,
+	--						callback = function()
+	--							vim.lsp.buf.format({ async = false })
+	--						end,
+	--					})
+	--				end
+	--			end,
+	--		})
+	--
+	--		-- Keymap for manual formatting
+	--		vim.keymap.set("n", "<leader>gf", function()
+	--			vim.lsp.buf.format({ async = true })
+	--		end, {})
+	--	end,
+}
